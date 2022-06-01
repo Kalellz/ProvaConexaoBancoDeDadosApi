@@ -1,5 +1,5 @@
 import multer from 'multer';
-import { insertFilm, insertImage, ListarTodosOsFilmes, BuscarPorID, BuscarPorNome } from '../repository/filmeRepository.js'
+import { insertFilm, insertImage, ListarTodosOsFilmes, BuscarPorID, BuscarPorNome, DeletarFilme, alterarFilme } from '../repository/filmeRepository.js'
 import { Router } from "express";
 
 
@@ -64,5 +64,32 @@ router.get('/filme', async (req, resp) => {
         erro : err.message
     })}})
 
+    router.delete('/filme/:id', async (req, resp) => {
+        try{ 
+            const { id } = req.params;
+            const resposta = await DeletarFilme(id);
+            if(resposta != 1) 
+                throw new Error ('filme não pode ser removido')
+            resp.status(204).send()
+    } catch(err){
+            resp.status(400).send({
+                erro: err.message
+        })}})
+
+    
+    router.put('/filme/:id', async (req, resp) => {
+        try{ 
+            const { id } = req.params;
+            const filme = req.body;
+            const resposta = await alterarFilme(id, filme);
+            if(resposta != 1) 
+                throw new Error ('filme não pode ser alterado')
+                else
+            resp.status(204).send()
+                
+    } catch(err){
+            resp.status(400).send({
+                erro: err.message
+        })}})
     
 export default router

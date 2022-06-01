@@ -56,3 +56,22 @@ export async function BuscarPorNome(){
 const [linhas] = await connection.query(comando, [`%${nome}%`]);
 return linhas;
 }
+export async function DeletarFilme(id){
+	const comando = `
+			DELETE FROM tb_filme
+			WHERE       id_filme = ?`
+	const [resposta] = await connection.query(comando, [id])
+	return resposta.affectedRows;
+}
+export async function alterarFilme(id, filme){
+	const comando = `
+	UPDATE  tb_filme
+	SET     nm_filme        = ?,
+			ds_sinopse      = ?,
+			vl_avaliacao    = ?,
+			dt_lancamento   = ?,
+			bt_disponivel   = ?
+	WHERE id_filme = ?`
+	const [resposta] = await connection.query(comando, [filme.nome, filme.sinopse, filme.avaliacao, filme.lancamento, filme.disponivel, id])
+	return resposta.affectedRows;
+}
